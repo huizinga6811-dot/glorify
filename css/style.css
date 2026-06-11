@@ -717,6 +717,8 @@ html.is-anim:not(.is-ready) .hero__title .char {
   max-width: 32ch;
 }
 
+.hero__tagline em { font-style: inherit; color: var(--gold-bright); }
+
 .hero__cta {
   display: flex;
   flex-wrap: wrap;
