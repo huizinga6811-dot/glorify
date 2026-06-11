@@ -21,7 +21,7 @@ jobs:
         run: |
           set -euo pipefail
           rm -rf _preview && mkdir -p _preview
-          base="file://$PWD/index.html"
+          base="file://$PWD/index.html?still"
           shot () { # name width height fragment
             google-chrome --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
               --window-size="$2,$3" --virtual-time-budget=14000 \

@@ -133,6 +133,7 @@ body::after {
 /* buttons */
 .btn {
   position: relative;
+  z-index: 0; /* own stacking context so the ::before fill stays inside */
   display: inline-block;
   padding: 1.05em 2.6em;
   border: 1px solid currentColor;
@@ -1494,6 +1495,16 @@ html.is-anim [data-stagger] > .reveal { transition-delay: calc(var(--i, 0) * 110
   .maison__facts { grid-template-columns: 1fr; }
   .hero__meta:last-of-type { display: none; }
   .footer__grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ============================================================
+   still mode (?still) — deterministic, motionless rendering
+   ============================================================ */
+
+html.is-still, html.is-still *, html.is-still *::before, html.is-still *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
 }
 
 /* ============================================================

@@ -9,7 +9,12 @@
   doc.classList.remove('no-js');
   doc.classList.add('js');
 
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // ?still freezes all motion — used for rendering deterministic previews
+  const stillMode = /[?&]still\b/.test(window.location.search);
+  if (stillMode) doc.classList.add('is-still');
+
+  const reducedMotion = stillMode
+    || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const finePointer = window.matchMedia('(pointer: fine)').matches;
   if (finePointer) doc.classList.add('has-fine-pointer');
 
