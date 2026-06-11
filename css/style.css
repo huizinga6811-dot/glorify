@@ -288,6 +288,15 @@ html:not(.is-anim) .preloader { display: none; }
   gap: 1.6rem;
 }
 
+.preloader__mark {
+  width: clamp(120px, 20vw, 180px);
+  height: auto;
+  aspect-ratio: 220 / 140;
+  color: var(--bone);
+  opacity: 0;
+  animation: plFade 1s 0.15s forwards;
+}
+
 .preloader__word {
   font-family: var(--font-display);
   font-size: clamp(2rem, 6vw, 3.4rem);
@@ -466,6 +475,18 @@ html.js.has-fine-pointer .cursor { display: flex; }
 .header__link:hover::after { transform: scaleX(1); }
 
 .wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.wordmark__mark {
+  width: 42px;
+  height: 27px;
+  flex: none;
+}
+
+.wordmark__text {
   font-family: var(--font-display);
   font-size: 1.25rem;
   letter-spacing: 0.46em;
@@ -1382,6 +1403,15 @@ html.is-anim:not(.is-ready) .hero__foot { opacity: 0; }
   color: var(--bone);
   padding: clamp(4rem, 8vw, 7rem) var(--gutter) 2rem;
   border-top: 1px solid rgba(244, 239, 231, 0.08);
+}
+
+.footer__mark {
+  display: block;
+  width: clamp(110px, 12vw, 150px);
+  height: auto;
+  aspect-ratio: 220 / 140;
+  margin: 0 auto 1.8rem;
+  color: rgba(244, 239, 231, 0.85);
 }
 
 .footer__brand {

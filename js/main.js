@@ -325,7 +325,7 @@
       }
       form.email.disabled = true;
       form.classList.add('is-done');
-      note.textContent = 'Welcome to the circle. The next letter finds you first.';
+      note.textContent = 'Welcome to the fellowship. The next letter finds you first.';
       note.classList.remove('is-error');
       note.classList.add('is-success');
     });

@@ -1,10 +1,11 @@
-# GLORIFY — Maison de Couture
+# GLORIFY — Luxury Christian Streetwear
 
-A self-contained, dependency-free luxury fashion website for the clothing brand **Glorify**.
+*Soli Deo Gloria.* A self-contained, dependency-free website for **Glorify**, a luxury
+Christian streetwear house. Cut slow. Worn loud. To His glory.
 
 Quiet-luxury art direction: bone & ink palette, champagne-gold accents, editorial serif
-typography, and a single cohesive campaign — *Campagna N°1 · Lumière* — photographed in
-a sunlit travertine gallery.
+typography, a crown-of-thorns "G" brand mark, and a single cohesive campaign —
+*Collection N°1 · Lux Mundi* — photographed in basilica light.
 
 ## Running it
 
@@ -42,7 +43,11 @@ marquee) — handy for screenshots, testing, or motion-free reading.
 - **Accessibility** — semantic landmarks, keyboard-accessible signatures list and menus,
   visible focus states, descriptive alt text.
 
-## Imagery
+## Imagery & mark
 
 The campaign photographs were generated with Higgsfield Soul 2.0 specifically for this
 project and are committed locally, so the site has no external runtime dependencies.
+
+The crown-of-thorns "G" currently on the site is an inline SVG interpretation of the
+official brand logo. To use the original artwork, commit it to `assets/img/` and swap
+the `#mark` references in `index.html`.
