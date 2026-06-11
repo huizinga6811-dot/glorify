@@ -15,35 +15,6 @@
 
   const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
-  /* ---------- preloader → staged hero entrance ---------- */
-
-  const preloader = document.getElementById('preloader');
-  const PRELOAD_MIN = 1500;
-  const PRELOAD_MAX = 2600;
-  const t0 = performance.now();
-
-  function finishPreload() {
-    if (doc.classList.contains('is-ready')) return;
-    if (preloader) {
-      preloader.classList.add('is-done');
-      preloader.addEventListener('transitionend', () => preloader.remove(), { once: true });
-      setTimeout(() => preloader.parentNode && preloader.remove(), 1400);
-    }
-    document.body.classList.remove('is-locked');
-    doc.classList.add('is-ready');
-  }
-
-  if (reducedMotion || !preloader) {
-    finishPreload();
-  } else {
-    document.body.classList.add('is-locked');
-    window.addEventListener('load', () => {
-      const wait = Math.max(0, PRELOAD_MIN - (performance.now() - t0));
-      setTimeout(finishPreload, wait);
-    });
-    setTimeout(finishPreload, PRELOAD_MAX); // never hold the page hostage
-  }
-
   /* ---------- split headline into animatable characters ---------- */
 
   document.querySelectorAll('[data-split]').forEach((el) => {
@@ -86,8 +57,38 @@
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -7% 0px' });
     revealables.forEach((el) => io.observe(el));
+  }
+
+  /* ---------- arm animations, then run the preloader ----------
+     `is-anim` switches on every hidden initial state, so it is only
+     added once the observers above are live — a failure anywhere
+     earlier leaves the site fully visible instead of blank. */
+
+  const preloader = document.getElementById('preloader');
+
+  function finishPreload() {
+    if (doc.classList.contains('is-ready')) return;
+    if (preloader) {
+      preloader.classList.add('is-done');
+      preloader.addEventListener('transitionend', () => preloader.remove(), { once: true });
+      setTimeout(() => preloader.parentNode && preloader.remove(), 1400);
+    }
+    document.body.classList.remove('is-locked');
+    doc.classList.add('is-ready');
+  }
+
+  if (reducedMotion || !preloader) {
+    finishPreload();
   } else {
-    revealables.forEach((el) => el.classList.add('is-in'));
+    doc.classList.add('is-anim');
+    document.body.classList.add('is-locked');
+    const t0 = performance.now();
+    const PRELOAD_MIN = 1500;
+    window.addEventListener('load', () => {
+      const wait = Math.max(0, PRELOAD_MIN - (performance.now() - t0));
+      setTimeout(finishPreload, wait);
+    });
+    setTimeout(finishPreload, 2600); // never hold the page hostage
   }
 
   /* ---------- header: solid after hero, hide on scroll down ---------- */
@@ -242,14 +243,13 @@
 
     document.addEventListener('mouseleave', () => cursor.classList.add('cursor--hidden'));
 
-    const HOVER = 'a, button, input, [data-cursor]';
     document.addEventListener('mouseover', (e) => {
-      const target = e.target.closest(HOVER);
-      cursor.classList.toggle('cursor--hover', !!target && !target.dataset.cursor);
-      const labelled = target && target.dataset.cursor;
+      const labelled = e.target.closest('[data-cursor]');
+      const interactive = e.target.closest('a, button, input');
       cursor.classList.toggle('cursor--label', !!labelled);
+      cursor.classList.toggle('cursor--hover', !labelled && !!interactive);
       if (labelled && cursorLabel) {
-        cursorLabel.textContent = labelled === 'drag' ? 'Drag' : 'View';
+        cursorLabel.textContent = labelled.dataset.cursor === 'drag' ? 'Drag' : 'View';
       }
     }, { passive: true });
   }

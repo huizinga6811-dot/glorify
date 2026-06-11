@@ -20,23 +20,47 @@ jobs:
       - name: Render screenshots
         run: |
           set -euo pipefail
-          mkdir -p _preview
-          url="file://$PWD/index.html"
-          shot () { # name width height
+          rm -rf _preview && mkdir -p _preview
+          base="file://$PWD/index.html"
+          shot () { # name width height fragment
             google-chrome --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
-              --window-size="$2,$3" --virtual-time-budget=12000 \
-              --screenshot="_preview/$1.png" "$url" 2>/dev/null
+              --window-size="$2,$3" --virtual-time-budget=14000 \
+              --screenshot="_preview/$1.png" "$base$4" 2>/dev/null
           }
-          shot desktop-hero 1440 900
-          shot desktop-full 1440 12000
-          shot tablet-full 820 12000
-          shot mobile-full 390 13500
+          shot desktop-hero        1440 900  ""
+          shot desktop-maison      1440 1150 "#maison"
+          shot desktop-collections 1440 1250 "#collections"
+          shot desktop-signatures  1440 1100 "#signatures"
+          shot desktop-campaign    1440 950  "#campaign"
+          shot desktop-lookbook    1440 1000 "#lookbook"
+          shot desktop-journal     1440 900  "#journal"
+          shot desktop-newsletter  1440 950  "#newsletter"
+          shot desktop-footer      1440 1000 "#contact"
+          shot mobile-hero         390  844  ""
+          shot mobile-maison       390  1500 "#maison"
+          shot mobile-collections  390  1500 "#collections"
+          shot mobile-signatures   390  1100 "#signatures"
+          shot mobile-footer       390  1200 "#contact"
           ls -la _preview
+
+      - name: Dump DOM state for debugging
+        run: |
+          google-chrome --headless=new --disable-gpu --no-sandbox \
+            --window-size=1440,900 --virtual-time-budget=14000 \
+            --dump-dom "file://$PWD/index.html" 2>/dev/null > /tmp/dom.html || true
+          echo "=== html tag ==="
+          grep -oE '<html[^>]*>' /tmp/dom.html || true
+          echo "=== body tag ==="
+          grep -oE '<body[^>]*>' /tmp/dom.html || true
+          echo "=== hero title ==="
+          grep -oE '<h1[^>]*>.{0,400}' /tmp/dom.html || true
+          echo "=== preloader occurrences ==="
+          grep -c 'preloader' /tmp/dom.html || true
 
       - name: Commit previews
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add _preview
+          git add -A _preview
           git commit -m "Render previews [skip ci]" || echo "nothing changed"
           git push
