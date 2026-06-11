@@ -24,8 +24,13 @@ It also works out of the box on GitHub Pages or any static host.
 | `index.html` | The complete one-page experience |
 | `css/style.css` | Design system + all styling (custom properties, no framework) |
 | `js/main.js` | Interactions — preloader, custom cursor, scroll reveals, parallax, lookbook drag, signatures hover pane (vanilla JS, no libraries) |
-| `assets/fonts/` | Self-hosted Italiana, Cormorant Garamond & Jost (woff2, latin subset) |
+| `assets/fonts/` | Self-hosted variable fonts: Italiana, Cormorant Garamond & Jost (woff2, latin subset, ~113 KB total) |
 | `assets/img/` | Campaign photography |
+| `_preview/` | Rendered screenshots of every section (desktop & mobile) |
+| `.github/` | Opt-in preview workflow — add `[preview]` to a commit message to re-render `_preview/` with headless Chrome |
+
+Appending `?still` to the URL freezes all motion (preloader, reveals, parallax,
+marquee) — handy for screenshots, testing, or motion-free reading.
 
 ## Design notes
 

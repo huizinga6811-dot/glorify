@@ -1504,6 +1504,7 @@ html.is-anim [data-stagger] > .reveal { transition-delay: calc(var(--i, 0) * 110
 @media (max-width: 1080px) {
   .signatures__grid { grid-template-columns: 1fr; }
   .signatures__pane { display: none; }
+  .signatures__hint { display: none; }
   .maison__grid { grid-template-columns: 1fr; }
   .maison__media { max-width: 520px; }
 }
