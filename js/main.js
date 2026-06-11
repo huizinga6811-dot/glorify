@@ -62,6 +62,8 @@
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -7% 0px' });
     revealables.forEach((el) => io.observe(el));
+  } else {
+    revealables.forEach((el) => el.classList.add('is-in'));
   }
 
   /* ---------- arm animations, then run the preloader ----------

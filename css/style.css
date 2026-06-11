@@ -37,6 +37,9 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-padding-top: 6.5rem;
+  /* clip, not hidden: hidden would turn body into a scroll container
+     and silently break window.scrollY and fragment navigation */
+  overflow-x: clip;
 }
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
@@ -50,7 +53,7 @@ body {
   font-size: 1rem;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body.is-locked { overflow: hidden; }
