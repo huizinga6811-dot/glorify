@@ -1,0 +1,42 @@
+name: Render previews
+
+# Screenshots the site with headless Chrome and commits the renders to _preview/.
+# Opt-in: only runs when the commit message contains [preview].
+
+on:
+  push:
+    branches: ["claude/fervent-lovelace-hl8hyx"]
+
+permissions:
+  contents: write
+
+jobs:
+  preview:
+    if: contains(github.event.head_commit.message, '[preview]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Render screenshots
+        run: |
+          set -euo pipefail
+          mkdir -p _preview
+          url="file://$PWD/index.html"
+          shot () { # name width height
+            google-chrome --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
+              --window-size="$2,$3" --virtual-time-budget=12000 \
+              --screenshot="_preview/$1.png" "$url" 2>/dev/null
+          }
+          shot desktop-hero 1440 900
+          shot desktop-full 1440 12000
+          shot tablet-full 820 12000
+          shot mobile-full 390 13500
+          ls -la _preview
+
+      - name: Commit previews
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add _preview
+          git commit -m "Render previews [skip ci]" || echo "nothing changed"
+          git push
