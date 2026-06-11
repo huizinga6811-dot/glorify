@@ -1,0 +1,26 @@
+name: Check mirror URLs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe public mirrors of the site
+        run: |
+          sha="${GITHUB_SHA}"
+          branch="claude/fervent-lovelace-hl8hyx"
+          check () {
+            code=$(curl -s -o /tmp/body -w "%{http_code}" --max-time 15 -L "$1")
+            ctype=$(curl -s -o /dev/null -w "%{content_type}" --max-time 15 -L "$1")
+            glorify=$(grep -c -i "glorify" /tmp/body || true)
+            echo "RESULT $code | $ctype | glorify-hits=$glorify | $1"
+          }
+          check "https://raw.githack.com/huizinga6811-dot/glorify/$branch/index.html"
+          check "https://rawcdn.githack.com/huizinga6811-dot/glorify/$sha/index.html"
+          check "https://cdn.jsdelivr.net/gh/huizinga6811-dot/glorify@$sha/index.html"
+          check "https://cdn.statically.io/gh/huizinga6811-dot/glorify/$sha/index.html"
